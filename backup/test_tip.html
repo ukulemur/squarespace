@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Mouse Over</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// width
+			var w = 800;
+			// height
+			var h = 800;
+			// d3 generated function to make pretty colors
+			var color = d3.scale.category20();
+			// empty list of data
+			var data = [];
+			// random generation of 100 pieces of data
+			for( var i = 0; i < 100; i++ ) {
+				data[i] = Math.floor(Math.random()*100);
+			}
+
+			// this function will be run everytime we mouse over an element
+			var myMouseoverFunction = function() {
+				// remember how d3 goes through EACH of the selected elements and uses your function for EACH element?
+				// well, everytime the function is used for an element, it has a "secret" variable called 'this' which holds that element.
+				// we use 'this' to increment the current element's radius by 10
+				var circle = d3.select(this);
+				circle.transition().duration(500)
+					.attr("r", circle.attr("r") * 1 + 10 );
+			}
+			// just generates random numbers for the circle positions
+			var myPositionFunction = function() {
+				return Math.random() * w;
+			}
+			
+			// here we append our blank svg to othe html page
+			var chart = d3.select("body")
+				.append("svg:svg")
+				.attr("width", w)
+				.attr("height", h);
+			
+			// the line spacing here is just for clarity. it doesn't matter
+			chart.selectAll("circle").data(data) 		
+
+				.enter().append("svg:circle")  		// for every piece of data, add a circle
+
+				.attr("cx", myPositionFunction) 	// use pos function to get x position
+
+				.attr("cy", myPositionFunction) 	// use pos function to get y position
+
+				.attr("r", function(d) {		// the radius will depend on our data.
+
+					return d; 			// this is equivalent to making the functions at the top.
+				})					// we just stick it in directly, rather than save it in a variable.
+
+				.attr("fill", color)			// use our fancy color function for fancy colors
+
+				.on("mouseover", myMouseoverFunction);	// this says "every time one of these circles is moused over, use this function
+		</script>
+	</body>
+</html>

@@ -1,0 +1,25 @@
+year,percent,METHOD,sex
+1994,67,Any method,FEMALE
+2002,75,Any method,FEMALE
+2010,78,Any method,FEMALE
+1994,2,Dual methods,FEMALE
+2002,13,Dual methods,FEMALE
+2010,15,Dual methods,FEMALE
+1994,8,Pill,FEMALE
+2002,17,Pill,FEMALE
+2010,16,Pill,FEMALE
+1994,50,Condom,FEMALE
+2002,66,Condom,FEMALE
+2010,68,Condom,FEMALE
+1994,71,Any method,MALE
+2002,82,Any method,MALE
+2010,85,Any method,MALE
+1994,3,Dual methods,MALE
+2002,10,Dual methods,MALE
+2010,16,Dual methods,MALE
+1994,10,Pill,MALE
+2002,15,Pill,MALE
+2010,18,Pill,MALE
+1994,55,Condom,MALE
+2002,71,Condom,MALE
+2010,80,Condom,MALE

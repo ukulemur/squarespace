@@ -1,0 +1,45 @@
+{
+ "name": "flare",
+ "children": [
+  {
+   "name": "sex_ed",
+   "children": [
+    {
+     "name": "hiv",
+     "children": [
+      {"name": "Mandated sex and HIV ed.", "size": 21},
+      {"name": "Mandated sex ed. only", "size": 1},
+      {"name": "Mandated HIV ed. only", "size": 13}
+     ]
+    },
+    {
+     "name": "abstinence",
+     "children": [
+      {"name": "Require that abstinence be included", "size": 11},
+      {"name": "Require that abstinence be stressed", "size": 26}
+     ]
+    },
+    {
+     "name": "contraception",
+     "children": [
+      {"name": "Require sex ed. include information on contraception", "size": 18},
+      {"name": "Require contraception be stressed", "size": 0}
+     ]
+    },
+    {
+     "name": "information",
+     "children": [
+      {"name": "Require that information be medically accurate and factual", "size": 13},
+      {"name": "Require that information be age appropriate", "size": 27}
+     ]
+    },
+    {
+     "name": "dream_world",
+     "children": [
+      {"name": "How big all these bubbles should be", "size": 50}
+     ]
+    }
+   ]
+  }
+ ]
+}

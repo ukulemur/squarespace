@@ -1,0 +1,99 @@
+ DISEASES OF HEART
+ MALIGNANT NEOPLASMS
+INFLUENZA AND PNEUMONIA
+
+2010,NON-HISPANIC WHITE, FEMALE
+                             DISEASES OF HEART  5351      40
+164                        MALIGNANT NEOPLASMS  3438      25
+266                    INFLUENZA AND PNEUMONIA   707       5
+445         CHRONIC LOWER RESPIRATORY DISEASES   502       4
+688                    CEREBROVASCULAR DISEASE   382       3
+848                         ALZHEIMERS DISEASE   247       2
+875                          DIABETES MELLITUS   258       2
+914  ESSENTIAL HYPERTENSION AND RENAL DISEASES   219       2
+1312           ACCIDENTS EXCEPT DRUG POISONING   164       1
+1313                           ATHEROSCLEROSIS    74       1
+
+Male
+                                    DISEASES OF HEART  4495      37
+124                               MALIGNANT NEOPLASMS  3408      28
+267                           INFLUENZA AND PNEUMONIA   614       5
+640                CHRONIC LOWER RESPIRATORY DISEASES   388       3
+803  PSYCH. SUBSTANCE USE & ACCIDENTAL DRUG POISONING   211       2
+809                           CEREBROVASCULAR DISEASE   276       2
+821                                 DIABETES MELLITUS   245       2
+913                   ACCIDENTS EXCEPT DRUG POISONING   272       2
+1320                               ALZHEIMERS DISEASE    94       1
+1321                   BENIGN AND UNCERTAIN NEOPLASMS    91       1
+
+BLACK FEMALE
+                             DISEASES OF HEART  2282      32
+163                        MALIGNANT NEOPLASMS  1768      25
+298                          DIABETES MELLITUS   384       5
+373  ESSENTIAL HYPERTENSION AND RENAL DISEASES   252       4
+402                    INFLUENZA AND PNEUMONIA   275       4
+467                    CEREBROVASCULAR DISEASE   259       4
+567         CHRONIC LOWER RESPIRATORY DISEASES   206       3
+866       HUMAN IMMUNODEFICIENCY VIRUS DISEASE   152       2
+1296           ACCIDENTS EXCEPT DRUG POISONING    58       1
+1297                        ALZHEIMERS DISEASE    88       1
+
+BLACK MALE
+                             DISEASES OF HEART  2015      31
+217                        MALIGNANT NEOPLASMS  1540      23
+265      HUMAN IMMUNODEFICIENCY VIRUS DISEASE   297       5
+299                        ASSAULT (HOMICIDE)   301       5
+448                         DIABETES MELLITUS   279       4
+562 ESSENTIAL HYPERTENSION AND RENAL DISEASES   178       3
+563        CHRONIC LOWER RESPIRATORY DISEASES   202       3
+564                   CEREBROVASCULAR DISEASE   171       3
+737                   INFLUENZA AND PNEUMONIA   201       3
+856           ACCIDENTS EXCEPT DRUG POISONING   147       2
+
+hispanic female
+91                           DISEASES OF HEART  1316      30
+184                        MALIGNANT NEOPLASMS  1045      24
+295                          DIABETES MELLITUS   219       5
+296                    INFLUENZA AND PNEUMONIA   228       5
+461         CHRONIC LOWER RESPIRATORY DISEASES   156       4
+462                    CEREBROVASCULAR DISEASE   168       4
+872                         ALZHEIMERS DISEASE    71       2
+883  ESSENTIAL HYPERTENSION AND RENAL DISEASES    95       2
+884       HUMAN IMMUNODEFICIENCY VIRUS DISEASE    79       2
+1278           ACCIDENTS EXCEPT DRUG POISONING    59       1
+
+hispanic male
+127                                DISEASES OF HEART  1355      28
+237                              MALIGNANT NEOPLASMS  1057      22
+297                          INFLUENZA AND PNEUMONIA   235       5
+411             HUMAN IMMUNODEFICIENCY VIRUS DISEASE   189       4
+416                                DIABETES MELLITUS   187       4
+569 PSYCH. SUBSTANCE USE & ACCIDENTAL DRUG POISONING   138       3
+571               CHRONIC LOWER RESPIRATORY DISEASES   149       3
+573              CHRONIC LIVER DISEASE AND CIRRHOSIS   150       3
+575                          CEREBROVASCULAR DISEASE   140       3
+577                  ACCIDENTS EXCEPT DRUG POISONING   132       3
+
+asian and pacific islander male
+93                         MALIGNANT NEOPLASMS   527      30
+137                          DISEASES OF HEART   479      27
+249                    INFLUENZA AND PNEUMONIA   108       6
+294                    CEREBROVASCULAR DISEASE    83       5
+393                          DIABETES MELLITUS    64       4
+568            INTENTIONAL SELF-HARM (SUICIDE)    46       3
+574         CHRONIC LOWER RESPIRATORY DISEASES    61       3
+576            ACCIDENTS EXCEPT DRUG POISONING    55       3
+860  ESSENTIAL HYPERTENSION AND RENAL DISEASES    30       2
+1270                        ALZHEIMERS DISEASE     9       1
+
+asian and pacific islander female
+99                         MALIGNANT NEOPLASMS   416      30
+113                          DISEASES OF HEART   394      29
+247                    CEREBROVASCULAR DISEASE    89       6
+293                    INFLUENZA AND PNEUMONIA    74       5
+490                          DIABETES MELLITUS    51       4
+793         CHRONIC LOWER RESPIRATORY DISEASES    28       2
+829            ACCIDENTS EXCEPT DRUG POISONING    26       2
+837  ESSENTIAL HYPERTENSION AND RENAL DISEASES    33       2
+1261                        ALZHEIMERS DISEASE    14       1
+1262                        ASSAULT (HOMICIDE)     7       1

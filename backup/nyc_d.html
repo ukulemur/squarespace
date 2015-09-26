@@ -1,0 +1,153 @@
+<!-- a line graph, with grouping from a csv. good to use with normal data set with categories in csv -->
+
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+
+    body { font: 12px Arial;}
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+      }
+
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+      }
+
+    .legend rect { 
+      fill:white;
+      stroke:black;
+      opacity:0.8;
+      }
+      
+      h1#title {
+        color:grey;
+      }
+
+  </style>
+  <script src= "d3.v3.js"></script> 
+  <script src="d3.legend.js"></script>
+</head>
+
+<body>
+  <h1 id = "title"> </h1>
+  <div id = "deathPlot"></div>
+  <script>   
+  
+  var deathdata, chart;
+  d3.csv("nyc_death.csv", function(error, data){
+    deathdata = data,
+    chart = new DeathNyc(deathdata),
+    chart.draw("DISEASES OF HEART","FEMALE")
+    ;
+  })
+  
+  var DeathNyc = function(data){
+    var margin = {top: 30, right: 40, bottom: 30, left: 100},
+    width = 700 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+    var x = d3.time.scale().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
+    var color = d3.scale.category20();
+    var xAxis = d3.svg.axis().scale(x)
+      .orient("bottom")
+      .ticks(5);
+    var yAxis = d3.svg.axis().scale(y)
+      .orient("left");
+    var parseDate = d3.time.format("%Y").parse;     
+    var line = d3.svg.line() //generator function
+      .interpolate("basis") //how to connect values
+      .x(function(d) { return x(d.Year); })
+      .y(function(d) { return y(d.Percent); });
+    var svg = d3.select("#deathPlot")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", 
+        "translate(" + margin.left + "," + margin.top + ")"
+      );
+    var xAxisContainer = svg.append("g")          
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+    var yAxisContainer =  svg.append("g")
+      .attr("class", "y axis")
+    var legendContainer = svg.append("g")
+      .attr("class","legend")
+      .attr("transform","translate(350,10)")
+      .style("font-size","12px")
+ 
+    data.forEach(function(d) { //reformating Numbers
+      d.Year = parseDate(d.Year);
+      d.Count = +d.Count;
+      d.Percent = +d.Percent;
+    });
+
+    this.draw = function(disease, sex){ //loop
+      var new_data = data.filter(function(row){
+        return row.CauseofDeath === disease && row.Sex === sex;
+      });
+      var nested_data = d3.nest() //group by, returns array of objects unqiue by key defined    
+        .key(function(d){
+          return d.Ethnicity + " " + d.Sex;
+        })
+        .entries(new_data);
+//reorders data     
+      nested_data.forEach(function(thing){
+        thing.values = thing.values.sort(function(a,b){
+          return a.Year - b.Year;
+        })
+      });  
+
+//Scale the range of the data   
+      x.domain(d3.extent(new_data, function(d) { 
+        return d.Year; }));
+      y.domain([
+        0,
+        d3.max(new_data, function(d) {
+          return d.Percent + 10;
+        })
+      ]);
+      color.domain(nested_data.map(function(x) {return x.key}));
+// Add the X Axis    
+      xAxisContainer.call(xAxis);
+// add the y axis
+      yAxisContainer.call(yAxis);
+//"seminal moment" whatever i pass here is an array, each treated as a unit of data
+    var type = svg.selectAll(".type")
+      .data(nested_data, function(d){ 
+        return d.key + " " + disease;
+      });
+    type.enter().append("g")
+      .attr("class", "type")
+      .append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .attr("data-legend",function(d) { return d.key})
+      .style("stroke", function(d) { return color(d.key); });
+
+    type.exit().remove() //removing old line data
+
+    legendContainer.call(d3.legend)  
+      
+    d3.select("#title").text(disease + " " + sex)    
+      
+        
+    };
+    
+  };
+ 
+
+    
+
+    </script>
+</body>
+</html>

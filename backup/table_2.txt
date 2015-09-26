@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title></title>
+    <style type = 'text/css'>
+    </style>
+  </head>
+  <body> 
+<TABLE>
+   <TR>
+      <TD>Data 1</TD>
+      <TD>Data 2</TD>
+   </TR>
+   <TR>
+      <TD>Data 3</TD>
+      <TD>Data 4</TD>
+   </TR>
+   <TR>
+      <TD>Data 5</TD>
+      <TD>Data 6</TD>
+   </TR>
+</TABLE>
+</body>
+</html>

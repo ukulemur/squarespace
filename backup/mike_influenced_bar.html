@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type = "text/javascript" charset = "utf-8" src = "d3.v3.js">
+    </script>
+    <title>'hufflepuff'</title>
+    <style type = "text/css">
+    </style>
+  </head>
+  <h3>DISEASE BURDEN OF MENTAL DISORDERS COMPARED TO RESOURCE ALLOCATION</h1>
+  <body>
+    
+    <script type = "text/javascript">
+      var w = 500;
+      var h = 350;
+      var barPadding = 10;
+      var dataset = [ 7.88, 14.5, 19.56, 21.37 ];
+      var dataset2 = [ 2.26, 2.26, 4.27, 6.88 ];
+      
+      var svg = d3.select('body')
+                  .append('svg')
+                  .attr('width', w)
+                  .attr('height', h);
+      
+      svg.selectAll('rect') //what i want to make
+          .data(dataset) //the data
+          .enter() //bring in the new elements
+          .append('rect') //append new text elements to the DOM
+          .attr('x', function(d, i) {
+            return i * (w / dataset.length);
+          })
+          .attr('y', function(d){ //how tall it is
+            return h - (d * 14);
+          })
+          .attr('width', w / dataset.length - barPadding)
+          .attr('height', function(d){ //where it starts??
+            return d * 24;
+          })
+          .attr("fill", "green")
+          ;
+          
+      svg.selectAll("text")
+          .data(dataset)
+          .enter()
+          .append("text")
+          .text(function(d){
+            return d;
+          })
+          .attr('x', function(d, i) {
+            return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+          })
+          .attr('y', function(d){ //where the numbers are
+            return h - (d * 14) + 16;
+          })
+          .attr("font-family","sans-serif")
+          .attr("font-size", "7 px")
+          .attr("fill", "white")
+          .attr("text-anchor", "middle");
+          
+var svg = d3.select('body')
+            .append('svg')
+            .attr('width', w)
+            .attr('height', h);
+
+svg.selectAll('rect') //what i want to make
+    .data(dataset2) //the data
+    .enter() //bring in the new elements
+    .append('rect') //append new text elements to the DOM
+    .attr('x', function(d, i) {
+      return i * (w / dataset.length);
+    })
+    .attr('y', function(d){
+      return h - (d * 14);
+    })
+    .attr('width', w / dataset.length - barPadding)
+    .attr('height', function(d){
+      return d * 24;
+    })
+    .attr("fill", "lightgreen")
+    ;
+    
+svg.selectAll("text")
+    .data(dataset2)
+    .enter()
+    .append("text")
+    .text(function(d){
+      return d;
+    })
+    .attr('x', function(d, i) {
+      return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+    })
+    .attr('y', function(d){
+      return h - (d * 8);
+    })
+    .attr("font-family","sans-serif")
+    .attr("font-size", "7 px")
+    .attr("fill", "white")
+    .attr("text-anchor", "middle");
+          
+          
+    </script>
+    
+  </body>
+</html>

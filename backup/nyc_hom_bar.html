@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+  <style>
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .bar {
+      fill: steelblue;
+    }
+
+    .axis {
+        font:10 px sans-serif;
+    }
+
+  </style>
+<body>
+    <script src= "d3.v3.js"></script> 
+    <script src="d3.legend.js"></script>
+<script>
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+      // width = 960 - margin.left - margin.right,
+      width = 860 - margin.left - margin.right,
+      height = 600 - margin.top - margin.bottom;
+  var x = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
+  var y = d3.scale.linear()
+      .rangeRound([height, 0]);
+  var color = d3.scale.ordinal()  .range(['rgb(213,62,79)','rgb(252,141,89)','rgb(254,224,139)','rgb(230,245,152)','rgb(153,213,148)','rgb(50,136,189)']);
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .ticks(5);
+  var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var barwidth = 15
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .ticks(5)
+      .orient("bottom")
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .ticks(10)
+      .orient("left");
+
+  d3.csv("homicide_nyc.csv", function(error, data) {
+    if (error) throw error;
+
+  //SET SCALE FUNCTION'S HELLA
+    x.domain(data.map(function(d) { return d.date }));
+    y.domain([0, d3.max(data, function(d) { return d.NationalHomicideRate; })]);
+
+    //append axes elements to the page.
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+    
+    svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class","bar")
+        .attr("x", function(d) { return x(d.date); })
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) { return y(d.NationalHomicideRate); })
+     //   .attr("y1", function(d) { return y(d.NYCHomicideRate); })
+        .attr("height", function(d) { return height - y(d.NationalHomicideRate); });
+
+        function type(d) {
+          d.frequency = +d.frequency;
+          return d;
+        }
+
+/// legend not yet 
+    var legend = svg.selectAll(".legend")
+        .data(color.domain().slice().reverse())
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    legend.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", color);
+
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) { return d; });
+
+  });
+
+</script>

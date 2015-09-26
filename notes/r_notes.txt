@@ -1,0 +1,264 @@
+R_notes
+
+#BASIC FUNCTIONS
+
+#change column name
+names(test)[names(test) == 'current_col_name'] <- 'new_col_name'
+#with plyr package
+library(plyr)
+rename(d, c("beta"="two", "gamma"="three"))
+
+#ifelse
+ifelse(the_data$amount > 50, "hi", "low")
+
+#sorting
+df[(order(df$column)), ] #A-Z, 1-10
+map2 <- with(map2, map2[order(vote, decreasing = TRUE), ]) #Z-A, 10-1
+sort(iris$Sepal.Length, decreasing = TRUE) #turns it into a list
+d2 <- d2[order(d2[,1], d2[,3], d2[,2], -d2[,6]), ] #order by indexing columns, - changes direction
+
+#coercion
+as.numeric(x)
+as.logical(x)
+as.character(x) #use to simplify list to a vector 
+as.data.frame(x)
+
+#Sequences of Numbers
+seq(starting number, ending number, by = interval)
+seq_along(my_seq) #creates a vector as long as my_seq, would be useful to assign something next to a list
+rep(what you want repeated, times = x)
+
+#concatenate
+table$column <- paste0("added_whatever", table[row, column])
+
+#equivalent to where/group by in sql
+data[data[ ,"boolean"] == "FALSE"] #prints all from column 
+data[data[ , "column"] < 20, ]
+#equivalent to group by in sql, also done w/ apply functions
+aggregate(data = df, functionappliedhere~groupby,"function")
+newdata <- subset(mydata, age >= 20 | age < 10, 
+table(data$column %in% c("value")) #gives T/F count when values equal
+table[table$column %in% c("value"), ]#gives all rows that match parameter
+
+#missing values
+p_final[is.na(p_final)] <- "" #chages NA to blank in object p_final
+sum(is.na(df$col)) #counts number of NAs
+with(df, df[!is.na(column), ])#grabs all data without NA - same as na.omit(df)
+aps[is.na(aps$langques), 'langques'] <- 'English' #converts NA to some value
+
+#logic
+xor(x,y) #will return T if one argument is T
+which(df > 5) #will return indices of df greater than 7
+any(df > 5) #will return T if one or more elements is T
+all(df > 5) #will return T if all elements are T
+
+#subsets
+p = subset(p, select = -dest_name) #will produce a data.frame
+trimmed <- test[ ,c("num")] # will produce a vector 
+
+#substrings
+test <- data.frame(a = c(1.2,4.5))
+test$a <- substr(test$a, 1, 1) #cuts the string down by start, finish
+
+#reordering levels
+bmi$Income.Group <- factor(bmi$Income.Group, levels = c('Low','Low-mid','Up-mid','High','Global')) #reorder for graphing
+bmi$Sex2 <- relevel(bmi$Sex, "Male") #puts one level (in this case male) at the beginning to then perform a regression from there
+bmi2 <-droplevels(bmi) #drops levels with no values
+
+#dates
+dates$dob <- ISOdate(dates$birth_year, dates$birth_month, dates$birth_day) #turns dates to isodate class
+dates$dob <- strptime(dates$dob, format = '%Y-%m-%d') #converts date to whatever format you want
+dates$age.atdeath <- difftime(dates$dod, dates$dob, unit = 'days') #calculates difference between days
+df <- read.table("data_with_dates.txt", header = TRUE, as.is = 2:3) #forcing dates to stay as numeric, not factors
+df$date <- chron(as.character(dates2$date_factor), format = 'm/d/y', out.format = 'month day year') #converting semi-readable date with new format
+df2$date_clean <- as.Date(as.date(as.character(dates2$date_horrible)))#magically cleans up dates
+
+
+#control structures - primarily used for writing programs
+if,else #testing a condition
+for #execute a loop a fixed number of times
+for(i in 1:10) {
+	print(i)
+} 
+repeat #execture an infinite loop
+while #execute a loop while a condition is true
+break #break execution
+next #skip interaction
+return #exit a function with a value
+
+#loops
+apply(iris[ , 1:4], 2, sum) #(data, 1 = row 2 = col, function), can be applied to matrix or df
+lapply(data, FUN) #takes list, applies function to each element, returns list of same length, always applies to col (equivalent of 2 in apply)
+sapply(data, FUN) #works on a list or vector, turns a df into a matrix, turns a matrix into a vector, basically converts it for you
+mapply() #applies a function in parallel over a set of arguments 
+tapply(flags$animate, flags$landmass, mean) #applies fx to animate var separately for each six landmass groups
+
+split() #not a loop function would used with the apply functions
+s <- split(airquality, airquality$month)
+lapply(s, function(x) colMeans(x[ , c("Ozone", "Solar.R")]))
+#splits airquality dataframe into 5 vectors(r?) the applies the colmeans function to each set and you get that funciton applied to each of the columns you ask for. hint:try it with sapply(becomes a matrix)
+
+
+
+#DEALING WITH FILES
+
+#reading data into r, textual formats
+read.table()
+read.csv()
+readLines() #reading lines of text file as vector
+textual formats: dump, dput #contains metadata so someoe doesn't have to specify it again, stores everything in text like Unix, ways to move stuff around
+file() #opens connection to file
+url() #opens connection to a webpage
+readLines(object, quantity)
+writeLines()
+my_data <- read.sas7bdat("~/Downloads/chs2013_public.sas7bdat", debug=FALSE) #reading spss files
+
+#swirl2 - files etc.
+file.create("whatever.R")
+setwd("testdir")
+file.exists("mytest.R") --gives boolen
+file.info("mytest.R")
+file.info("mytest.R")$mode or $size etc.
+file.
+excludeFiles("current", "new")
+file.copy("current", "new")
+unlink("testdir2", recusive = TRUE) #use recursive = true to tell it that you realize it's nested, don't give a shit!
+
+#13, simulation
+sample(range of numbers, how many, replace = TRUE/FALSE)
+rnorm()
+d for density
+r for random number generation
+p for cum distribtion
+q for quantile function
+set.seed()
+rpois(how many,rate) # mean equals rate
+
+#downloading files & reading files
+download.file()
+dateDownloaded <- date()
+dateDownloaded
+read.table() #deafult is tab delimited
+read.table("x.csv", sep = ",", header = TRUE)
+#excel files
+read.xlsx("x.xlsx", sheetIndex = 1, header = TRUE)
+read.xlsx(file, sheetIndex, sheetName=NULL, rowIndex=NULL,
+  startRow=NULL, endRow=NULL, colIndex=NULL,
+  as.data.frame=TRUE, header=TRUE, colClasses=NA,
+  keepFormulas=FALSE, encoding="unknown", ...)
+#xml files
+library(XML)
+fileUrl <- "http://www.w3schools.com/xml/simple/xml"
+doc <- xmlTreeParse(fileUrl, useInternal = TRUE) #useinternal gets all nodes
+rootNode <- xmlRoot(doc)
+xmlName(rootNode)
+rootNode[[1]]
+xmlSApply(rootNode,xmlValue)
+xmlSApply(rootNode,"//name",xmlValue) #lists items in "name" node
+#JSON
+#javascript object notation
+#lightweight, similar to XML in that it's a structerd language
+library(jsonlite)
+jsondata <- fromJSON("http://...")
+
+#spss
+library(Hmisc)
+my_data <- spss.get("whatever.sav", use.value.labels = TRUE)
+#sas
+library(Hmisc)
+my_data <- sasxport.get("whatever.xpt")
+#stata
+library(foreign)
+my_data <- read.dta("whatever.dta")
+
+#data.table
+DT[ ,list(mean(x), sum(z))] #applies different functions to different columns, returns in a neat little list
+DT[ ,table(y)]
+#merging two data.tables, setkey tells it what to find in common
+> DT1 <- data.table(x=c('a','a','b','dt1'), y = 1:4)
+> DT2 <- data.table(x=c('a','b','dt2'), z = 5:7)
+> setkey(DT1,x)
+> setkey(DT2,x)
+> merge(DT1, DT2)
+
+
+
+#NUTS AND BOLTS
+
+#STRUCTURE
+
+[x,y] # tell it where to look
+() # tell it what to do
+x = row
+y = column
+blank = all
+
+nrow(dataset) # gives number of data rows
+ncol(dataset) # gives number of data columns
+range() #returns min & max
+class() #returns class
+unique() #returns vector of unique elements
+table(df$column) #returns each value as column header with count as row 1
+object.size(df) #how many bytes
+
+3 basic objects:
+	atomic vector
+		character
+		numeric
+		integer
+		complex number
+		logical
+	list
+	NULL
+
+vector:
+one dimension, 3 different kinds
+junebug <- c(1,2,3) #numeric vector
+beetle <- c("one", "two", "three") #character vector
+grasshopper <- c(TRUE, TRUE, FALSE) # logical vector
+
+list:
+generic vector containing other objects
+test = c(2:4)
+can consist of different types of objects (numeric + logical, etc.)
+retrieve a list slice (aka column) with dataset[column_number]
+multiples with dataset[c(column_number,column_number)]
+dataset[[1]][1] = "10"   - will change the first row, first column value to 10
+dataset[1][1] = "10"  - will change all rows, first column value to 10
+
+
+3 derived objects
+	matrix
+	data frame
+	factor
+	
+matrix:
+vector with dimensions #probably won't use much really
+
+dataframe:
+two dimension(S!)
+used for storing data tables
+list of vectors of equal length
+how to create a df: test = data.frame(a = 2:4, b = c("blue", "yellow", "red"))
+how to rename rownames: rownames(dataset) <- c("jane","rob","peter")
+
+#symbol binding, scoping, environments
+environments, list of objects and values
+arguments #passed through definition of function
+r uses lexical scoping or static scoping #fucntion looked up in env. function was defined
+dynamic scoping #env. its called
+free variables #values not definted in function header, the values of free variables are searched for in the environment in which the function was defined
+environment #collection of (symbol + value) pairs, function + environment = closure
+
+
+what is the quickest way to get a mean of a column
+
+sapply(split(DT$pwgtp15,DT$SEX),mean)
+#lumping data into buckets based on SEX variable, then sapplying the mean function to the pmgtp15 column. result will be number of columns that are unique value of sex.
+
+tapply(DT$pwgtp15,DT$SEX,mean)
+#does the same thing but with tapply, doesn't require split
+
+row.names(data)
+data$column <- row.names(data)
+#if you end up with one long lonely column, do this

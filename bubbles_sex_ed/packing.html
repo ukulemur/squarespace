@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+circle {
+  fill: rgb(31, 119, 180);
+  fill-opacity: .25;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf circle {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+}
+
+text {
+  font: 10px sans-serif;
+}
+
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+var diameter = 960,
+    format = d3.format(",d");
+
+var pack = d3.layout.pack()
+    .size([diameter - 4, diameter - 4])
+    .value(function(d) { return d.size; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter)
+  .append("g")
+    .attr("transform", "translate(2,2)");
+
+// new york - 782
+// nyc - 864.0
+// florida - 599
+// miami - 1,037.7
+// penn -290
+// phil - 860.5
+// california - 375
+// sf - 1042.5
+// illinois - 324
+// chicago - 382.6
+// mass - 334
+// boston - 413.2
+    var root = {
+     "name": "flare",
+     "children": [
+      {
+         "name": "New York",
+         "children": [
+          {"name": "Harlem", "size": 21},
+         ]
+        },
+        {
+         "name": "Contraception",
+         "children": [
+          {"name": "Require that abstinence be included", "size": 37},
+          {"name": "Require that abstinence be stressed", "size": 26},
+          {"name": "Require sex education include information on contraception", "size": 18}
+         ]
+        },
+        {
+         "name": "Sexual Orientation",
+         "children": [
+          {"name": "Require discussion of sexual orientation", "size": 12},
+          {"name": "Require that discussion of sexual orientation be inclusive", "size": 9}
+         ]
+        },
+        {
+         "name": "Content",
+         "children": [
+          {"name": "Require that information be medically accurate", "size": 13},
+          {"name": "Require that information be age appropriate", "size": 27},
+           {"name": "Require that the program must provide instruction that is culturally appropriate and not be biased against any race, sex or ethnicity", "size": 8},
+          {"name": "Prohibit sexual education from promoting religion", "size": 2},
+          {"name": "Require information about skills for healthy sexuality (including avoiding coerced sex) and family communication", "size": 26}
+         ]
+        }
+     ]
+    }
+
+  var node = svg.datum(root).selectAll(".node")
+      .data(pack.nodes)
+    .enter().append("g")
+      .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  node.append("title")
+      .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
+
+  node.append("circle")
+      .attr("r", function(d) { return d.r; });
+
+  node.filter(function(d) { return !d.children; }).append("text")
+      .attr("dy", ".3em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.name.substring(0, d.r / 3); });
+
+
+d3.select(self.frameElement).style("height", diameter + "px");
+
+</script>

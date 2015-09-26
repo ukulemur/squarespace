@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type = "text/javascript" charset = "utf-8" src = "d3.v3.js">
+    </script>
+    <title></title>
+    <style type = "text/css">
+    text { fill: black; text-anchor: middle; }
+    line { stroke-width: 1; stroke: lightgray; }
+    </style>
+  </head>
+  <body>
+    <script type = "text/javascript">   
+
+
+
+    dataset = d3.range(50,500,50);
+
+    svg = d3.select("body").append("svg").attr({width:500,height:300});
+
+    group = svg.selectAll("g")
+        .data(dataset)
+        .enter()
+        .append("g");
+
+    group.append("text")
+        .text("My text")
+        .attr("x",function (d) {return d;})
+        .attr("y",200)
+        .attr("dy","0.35em")
+        .attr("transform", function(d, i) {return "rotate("+45*i+","+d+",200)";});
+    </script>
+  </body>
+</html>

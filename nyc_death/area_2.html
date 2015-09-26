@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font: 12px Arial; }
+    h1, select, #tooltip, .legend-text {
+      text-transform: capitalize;
+    }
+    #title {
+      color: gray;
+    }
+    #tooltip {
+      background-color: rgba(100,100,100, 0.8);
+      padding: 0.5em;
+      font-size: 1.1em;
+      font-weight: 500;
+      color: white;
+      border-radius: 3px;
+      position: absolute;
+      /*init*/
+      display: none;
+    }
+    .right {
+      float: right;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+  </style>
+  <script src= "d3.v3.js"></script> 
+</head>
+
+<body>
+  <h1 id="title"> </h1>
+  <select id="select-box"></select>
+  <div id="deathPlot"></div>
+  <div id="tooltip"></div>
+  <script>
+
+    var deathdata, chart;
+
+    d3.csv("nyc_death.csv", function(error, data){
+      deathdata = data,
+      chart = new DeathNyc(deathdata),
+      chart.draw("NON-HISPANIC WHITE", "FEMALE");
+    });
+
+    var DeathNyc = function(data){
+      var self = this;
+
+      var margin = {top: 30, right: 40, bottom: 30, left: 50},
+        width = 1000 - margin.left - margin.right,
+        height = 570 - margin.top - margin.bottom,
+        legendWidth = 210,
+        totalWidth = width + legendWidth;
+
+      var x = d3.time.scale().range([0, width - margin.right - margin.left]);
+      var y = d3.scale.linear().range([height, 0]);
+
+      var color = d3.scale.category20();
+
+      var xAxis = d3.svg.axis().scale(x)
+        .orient("bottom")
+        .ticks(5);
+
+      var yAxis = d3.svg.axis().scale(y)
+        .tickFormat(function(d){ return d3.format("%")(d/100);})
+        .orient("left");
+      var parseDate = d3.time.format("%Y").parse;
+
+      var area = d3.svg.area()
+        .interpolate("basis")
+        .x(function(d) { return x(d.Year); })
+        .y0(function(d) { return y(d.y0); })
+        .y1(function(d) { return y(d._y); });
+
+      var svg = d3.select("#deathPlot")
+        .append("svg")
+        .attr("width", totalWidth + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")"
+        );
+
+      var xAxisContainer = svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+      var yAxisContainer =  svg.append("g")
+        .attr("class", "y axis")
+ 
+      data.forEach(function(d) { //reformating Numbers
+        d.Year = parseDate(d.Year);
+        d.Count = +d.Count;
+        d.Percent = +d.Percent;
+        d.y = d.Percent;
+      });
+
+      color.domain(d3.set(data.map(function(d){return d.CauseofDeath;})).values());
+
+      //select box
+      var select = d3.select('select')
+        .on("change", function(v){
+          var selected = d3.select(this).property('value').toUpperCase();
+          var sex = selected.split(" ").slice(-1)[0];
+          var ethnicity = selected.split(" ").slice(0, -1).join(" ");
+          self.draw(ethnicity, sex);
+        });
+
+      select.selectAll('option')
+        .data(d3.set(data.map(function(d){ return d.Ethnicity + " " + d.Sex; })).values())
+        .enter()
+        .append('option')
+        .text(function (d) { return d.toLowerCase(); });
+
+      //tooltip
+      var tooltip = {
+        selection: d3.select("#tooltip"),
+
+        show: function(d, i){
+          var self = this;
+          var x0 = (x.invert(d3.mouse(this)[0]));
+          var bisect = d3.bisector(function(d){ return d.Year; }).left;
+          var point = d.values[bisect(d.values, x0)];
+          var tooltipText = [
+            "Disease: " + "<span class='right'>" + d.key.toLowerCase(),
+            "Year: " + "<span class='right'>" + point.Year.getFullYear(),
+            "Percent: " + "<span class='right'>" + d3.format("%")(point.Percent/100)
+          ].join("</span><br />");
+
+          var tooltipOffset = {x: 10, y: 0};
+          tooltip.selection
+            .style("left", (d3.event.pageX + tooltipOffset.x) + "px")
+            .style("top", (d3.event.pageY - margin.top - margin.bottom - tooltipOffset.y) + "px")
+            .html(tooltipText)
+            .style("display", "block").transition().duration(500).style("opacity", 1);
+        },
+
+        hide: function(d){
+          tooltip.selection
+            .transition().duration(500).style("opacity", 0).style("display", "none");
+        }
+      };
+
+      //legend
+      color.domain().slice(0, 17).reverse().forEach(function(d, i){
+        var legendBoxDim = 15;
+
+        svg.insert('rect', ':first-child')
+        .attr('y', 30 * i + 2)
+        .attr('x', width - margin.left)
+        .attr('width', legendBoxDim)
+        .attr('height', legendBoxDim)
+        .attr('fill', function(){
+          return color(d);
+        });
+
+        svg.insert('text', ':first-child')
+          .attr("class", "legend-text")
+          .text(d.toLowerCase())
+          .attr('y', 30 * i + 13) //font-size, presumably
+          .attr('x', width - margin.left + legendBoxDim + 3)
+      });
+
+      this.draw = function(ethnicity, sex){ //loop
+        var self = this;
+        var new_data = data.filter(function(row){
+          return row.Ethnicity === ethnicity && row.Sex === sex;
+        });
+
+        var nested_data = d3.nest() //group by, returns array of objects unqiue by key defined    
+          .key(function(d){
+            return d.CauseofDeath;
+          })
+          .entries(new_data);
+
+      //reorders data
+        nested_data.forEach(function(thing){
+          thing.values = thing.values.sort(function(a,b){
+            return a.Year - b.Year;
+          });
+        });
+
+        //create a helper object to keep track of the y0 value for each year.
+        var allYears = d3.set(new_data.map(function(d){return d.Year;})).values(); //get unique year values of Year from dataset
+        var yearY0sDictionary = {}; //initialize empty object
+        allYears.forEach(function(e){ yearY0sDictionary[e] = 0; }); //for each unique year, add a key to the dictionary and set it to 0 initially
+        //
+        nested_data.forEach(function(e, i){ //for each disease
+          e.values.forEach(function(e, i){ //for each year (in that disease)
+            e.y0 = yearY0sDictionary[e.Year]; //y0 is equal to the current y0 in the dictionary for that year
+            yearY0sDictionary[e.Year] += e.y; //increment the dictionary[year] value by this year's y
+            e._y = e.y + e.y0; //set this year's y value to it's percent plus the current y0
+          });
+        });
+
+        //Scale the range of the data
+        x.domain(d3.extent(new_data, function(d) { return d.Year; }));
+        y.domain([0, 100]);
+
+        // Add the X Axis
+        xAxisContainer.transition().duration(1000).call(xAxis);
+        // add the y axis
+        yAxisContainer.transition().duration(1000).call(yAxis);
+
+
+        //"seminal moment" whatever i pass here is an array, each treated as a unit of data
+        var disease = svg.selectAll("path.disease")
+          .data(nested_data, function(d){
+            return [d.key, d.values[0].Ethnicity, d.values[0].Sex].join("_");
+          });
+      
+        disease.exit().remove(); //removing old line data
+
+        disease.enter()
+          .append("path")
+          .classed("disease", true)
+          .attr('data-disease', function(d){return d.key; })
+          .style("fill", function(d) {return color(d.key); })
+          .attr("d", function(d) {
+            var tmp = disease.exit().data().filter(function(e){return e.key === d.key; })[0];
+            return tmp ? area(tmp.values) : area(d.values);
+          })
+          .on("mouseover", tooltip.show)
+          .on("mouseout", tooltip.hide)
+          .transition().duration(1000)
+            .attr("d", function(d) {
+              return area(d.values);
+            });
+
+        d3.select("#title")
+          .text((ethnicity + " " + sex).toLowerCase());
+
+      };
+    };
+
+  </script>
+</body>
+</html>

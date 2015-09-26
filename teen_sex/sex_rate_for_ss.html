@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+  <style>
+
+    body { font: 12px Arial;}
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+      }
+
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+      }
+
+    .legend rect {
+      fill:white;
+      stroke:black;
+      opacity:0.6;
+      }
+
+  </style>
+<body>
+
+
+  <script>
+    //set margins
+    var margin = {top: 30, right: 40, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+
+    //tell it the year is a date
+    var parseDate = d3.time.format("%Y").parse;
+
+    var x = d3.time.scale().range([0, width]);
+
+    var y = d3.scale.linear().range([height, 0]);
+
+    var color = d3.scale.category10();
+
+    var xAxis = d3.svg.axis().scale(x)
+      .orient("bottom");
+
+    var yAxis = d3.svg.axis().scale(y)
+      .orient("left");
+
+    var line = d3.svg.line()
+      .interpolate("basis")
+      .x(function(d) { return x(d.date); })
+      .y(function(d) { return y(d.rate); });
+
+    var svg = d3.select("body")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
+
+    // Get the data
+    var data = 
+"date,Percentage of teens who've had sex,Pregnancy rate per     1000\n1991,54,62\n1993,53,59\n1995,53,56\n1997,48,51\n1999,50,49\n2001,46,45\n2003,47,41\n2005,47,40\n2007,48,42\n2009,46,38\n2011,47,31\n2013,47,27";
+    data = d3.csv.parse(data);
+
+    color.domain(d3.keys(data[0]).filter(function(key) {return key !== "date"; }));
+
+    data.forEach(function(d) {
+      d.date = parseDate(d.date);
+      d.sex_rate = +d.sex_rate;
+      d.pregnancy_rate = +d.pregnancy_rate;
+      });
+
+    var rates = color.domain().map(function(name){
+      return {
+      name: name,
+      values: data.map(function(d){
+      return {date: d.date, rate: +d[name]};
+      })
+      }
+      })
+
+    // Scale the range of the data   
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([
+    d3.min(rates, function(r) {return d3.min(r.values, function (v) {return v.rate; }); }), 
+    d3.max(rates, function(r) {return d3.max(r.values, function (v) {return v.rate; }); }),
+    ]);
+
+    svg.append("g")            // Add the X Axis
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+
+    var type = svg.selectAll(".type")
+      .data(rates)
+      .enter().append("g")
+      .attr("class", "type");
+
+    type.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .attr("data-legend",function(d) { return d.name})
+      .style("stroke", function(d) { return color(d.name); });
+
+    legend = svg.append("g")
+      .attr("class","legend")
+      .attr("transform","translate(265,30)")
+      .style("font-size","14px")
+      .call(d3.legend)
+
+  </script>
+</body>

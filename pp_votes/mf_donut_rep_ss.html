@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.arc path {
+  stroke: #fff;
+}
+
+#tooltip {
+  position: absolute;
+  text-align: center;
+  background: #5BA2F0;
+  padding: 8px;
+  border-radius: 10px;  
+}
+
+#donut_rep {
+  display: inline-block;
+  width: 49%;
+  font: 12px sans-serif;
+}
+
+</style>
+<body>
+<script>
+
+var width = 608,
+    height = 280,
+    radius = Math.min(width, height) / 2;
+
+var color = d3.scale.ordinal()
+    .range(["rgb(197,27,138)", "#5BF05F"]);
+
+var arc = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(radius - 70);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.percent; });
+
+var svg = d3.select("#donut_rep").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+        .attr("transform", "translate(" + 210 + "," + height / 2 + ")");
+
+    var data =  "gender,percent\nMale,91\nFemale,9";
+        data = d3.csv.parse(data);
+
+  data.forEach(function(d) {
+    d.percent = +d.percent;
+  });
+  
+   var tooltip = d3.select("body")
+       .append("div")
+       .style("position", "absolute")
+       .style("z-index", "10")
+       .style("display", "none")
+       .attr("id", "tooltip")
+
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+    .enter().append("g")
+      .attr("class", "arc");
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data.gender)
+      })
+      .on("mouseover", function(d){
+  d3.select("#tooltip") //use pound to select by id
+      .style("display","block")
+      .style("opacity", 1)
+      .html(d.data.percent + "%")
+      .style({
+        top: (d3.event.pageY) + "px",
+        left: (d3.event.pageX) + "px"})
+    })
+    .on("mouseout", function(d){
+      d3.select("#tooltip")
+      .style("display","none");
+    })
+  ;
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.data.gender; });
+      
+   svg.append("text")
+      .attr("text-anchor", "middle")
+      .html("REPUBLICANS")
+      .attr("font-size", "15px");    
+
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<style type="text/css">
+	.TFtable{
+		width:100%; 
+		border-collapse:collapse; 
+	}
+	.TFtableCol td{ 
+		padding:7px; border:#c0c0c0 .5px solid; font-size:12pt;
+	}
+	/* improve visual readability for IE8 and below */
+	.TFtable tr{
+		background: #7d8582;
+	}
+	/*  Define the background color for all the ODD table columns  */
+	.TFtableCol tr:nth-child(odd){ 
+		background: #7d8582;
+	}
+	/*  Define the background color for all the EVEN table columns  */
+	.TFtableCol tr:nth-child(even){
+		background: #9aa5a1;
+	}
+	
+	th {font-size:12pt; padding: 7px;}
+</style>

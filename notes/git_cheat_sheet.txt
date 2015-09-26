@@ -1,0 +1,12 @@
+## git commands:
+git add [file] -- stages the change (but can be reset)
+git commit -m "[message]" -- commits all staged changes, with a message
+git push origin [branch] -- pushes local branch to remote (i.e. github) repository. branch is often 'master'
+
+git status -- shows working copy and fart freq (ff) of surrounding area
+git diff -- shows difference between working copy and base branch
+
+git checkout -- <file> - discards changes in working directory and reverts file back to last commit
+
+ruby -run -e httpd . -p 8000 
+ 	run server 
