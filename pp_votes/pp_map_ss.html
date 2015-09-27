@@ -27,12 +27,6 @@ svg{
 }
 
 body { font: 9px Arial;}
-
-#key {
-  position: absolute;
-  top:40px;
-  left: 640px;
-    }
     
 .axis line, .axis path {
         fill: none;
@@ -51,12 +45,12 @@ body { font: 9px Arial;}
         .scale(1280)
         .translate([width / 2, height / 2]);
 
-    var path = d3.geo.path() //define path and set projection
+    var path = d3.geo.path() 
         .projection(projection);
 
-    var svg = d3.select("#pp_vote_map").append("svg") //define overall graphic svg and place it 
-        .attr("width", width)               //in the html
-        .attr("height", height);
+    var svg = d3.select("#pp_vote_map").append("svg") 
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 " + width + " " + height);
 
     var data =  {
       Alaska:0,
@@ -154,13 +148,13 @@ body { font: 9px Arial;}
 
     //attempt at a legend
           //linear gradient key
-      var h = 125, w = 300;
+      var h = 125, w = 220;
 
-      var key = d3.select("#pp_vote_map")
+      var key = d3.select("#mapLegendContainer")
         .append("svg")
         .attr("id", "key")
-        .attr("width", w)
-        .attr("height", h);
+        .attr("width", 230)
+        .attr("height", 50);
 
       var legend = key.append("defs") //creates empty gradient
         .append("svg:linearGradient")
@@ -182,13 +176,13 @@ body { font: 9px Arial;}
         .attr("stop-opacity", 1);
 
       key.append("rect")
-        .attr("width", w - 100)
+        .attr("width", w)
         .attr("height", h - 100)
         .style("fill", "url(#gradient)")
         .attr("transform", "translate(0,10)") //size of rectangle that holds gradient
 
       var legendScale = d3.scale.linear()
-        .range([0, w - 100])
+        .range([0, w])
         .domain(color.domain())
       var legendAxis = d3.svg.axis().scale(legendScale)
         .orient("bottom");        
